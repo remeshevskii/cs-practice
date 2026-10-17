@@ -8,13 +8,13 @@ def parse_record(line: str) -> dict:
     if len(parts) != 3:
         raise ValueError("Неверное количество полей в строке")
         
-    city, temp_str, date = parts
+    city, temperature_str, date = parts
     
     if not city.strip() or not date.strip():
         raise ValueError("Город или дата не могут быть пустыми")
         
     try:
-        temp = float(temp_str)
+        temperature = float(temp_str)
     except ValueError:
         raise ValueError(f"Температура должна быть числом, получено: {temp_str}")
         
@@ -51,7 +51,7 @@ def average_by_city(records: list):
     
     for record in records:
         city = record["city"]
-        temp = record["temp"]
+        temperature = record["temperature"]
         
         if city not in city_stats:
             city_stats[city] = {"sum": 0.0, "count": 0}
@@ -78,10 +78,10 @@ def warmest_city(records: list):
     best_city = None
     max_temp = float('-inf')
     for city in sorted(averages.keys()):
-        temp = averages[city]
+        temperature = averages[city]
         
-        if temp > max_temp:
-            max_temp = temp
+        if temperature > max_temp:
+            max_temp = temperature
             best_city = city
             
     return best_city
