@@ -8,7 +8,7 @@ def parse_record(line: str) -> dict:
     if len(parts) != 3:
         raise ValueError("Неверное количество полей в строке")
         
-    city, temperature_str, date = parts
+    city, temp_str, date = parts
     
     if not city.strip() or not date.strip():
         raise ValueError("Город или дата не могут быть пустыми")
