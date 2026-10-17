@@ -5,21 +5,17 @@ def parse_record(line: str) -> dict:
     """
     parts = line.split(";")
     
-    # Проверка, что полей ровно три
     if len(parts) != 3:
         raise ValueError("Неверное количество полей в строке")
         
     city, temp_str, date = parts
     
-    # Проверка на пустые город или дату
     if not city.strip() or not date.strip():
         raise ValueError("Город или дата не могут быть пустыми")
         
-    # Проверка, что температура — число
     try:
         temp = float(temp_str)
     except ValueError:
-        # Перехватываем ошибку float и возбуждаем свою с понятным сообщением
         raise ValueError(f"Температура должна быть числом, получено: {temp_str}")
         
     return {
@@ -29,13 +25,12 @@ def parse_record(line: str) -> dict:
     }
 
 
-def read_valid(lines: list[str]) -> list[dict]:
+def read_valid(lines: list):
     """
     Разбирает строки журнала, пропуская пустые и негодные.
     """
     valid_records = []
     for line in lines:
-        # Пустые строки пропускаются молча
         if not line.strip():
             continue
             
@@ -43,13 +38,12 @@ def read_valid(lines: list[str]) -> list[dict]:
             record = parse_record(line)
             valid_records.append(record)
         except ValueError:
-            # Негодные строки просто пропускаем
             continue
             
     return valid_records
 
 
-def average_by_city(records: list[dict]) -> dict:
+def average_by_city(records: list):
     """
     Вычисляет среднюю температуру по каждому городу, округленную до десятых.
     """
@@ -67,13 +61,11 @@ def average_by_city(records: list[dict]) -> dict:
         
     averages = {}
     for city, data in city_stats.items():
-        # Округляем до десятых, как требуется в задании
         averages[city] = round(data["sum"] / data["count"], 1)
-        
     return averages
 
 
-def warmest_city(records: list[dict]) -> str:
+def warmest_city(records: list):
     """
     Находит город с наибольшей средней температурой.
     При равенстве выбирает первый по алфавиту.
@@ -85,9 +77,6 @@ def warmest_city(records: list[dict]) -> str:
     
     best_city = None
     max_temp = float('-inf')
-    
-    # Сортируем словарь по ключам (названиям городов), чтобы при равенстве
-    # температур гарантированно выбрать первый по алфавиту
     for city in sorted(averages.keys()):
         temp = averages[city]
         
