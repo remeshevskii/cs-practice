@@ -8,8 +8,9 @@ def parse_event(line: str) -> dict:
     
     if level not in valid_levels:
         raise ValueError(f"Неизвестный уровень: {level}")
+        
     if not message.strip():
-		raise ValueError("Пустое сообщение")
+        raise ValueError("Пустое сообщение")
         
     return {"time": time_str, "level": level, "message": message}
 
