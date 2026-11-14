@@ -73,6 +73,9 @@ def parse_settings(lines: list[str]) -> dict:
             if not val:
                 result[key] = []
             else:
+                if (val_str.startswith('"') and val_str.endswith('"')) or \
+                (val_str.startswith("'") and val_str.endswith("'")):
+                    val_str = line[1:-1].strip()
                 result[key] = _cast_value(val)
 
     return result
