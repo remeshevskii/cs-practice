@@ -4,9 +4,9 @@ import io
 
 def csv_to_records(text: str) -> list[dict]:
     f = io.StringIO(text.strip())
-    reader = csv.reader(f)
+    reader = csv.reader(f, skipinitialspace=True)
     try:
-        headers = next(reader)
+        headers = [h.strip() for h in next(reader)]
     except StopIteration:
         return []
     
@@ -14,9 +14,28 @@ def csv_to_records(text: str) -> list[dict]:
     for row in reader:
         if not row:
             continue
-        record = dict(zip(headers, row))
+        cleaned_row = [val.strip() for val in row]
+        record = dict(zip(headers, cleaned_row))
         records.append(record)
     return records
+
+def _cast_value(val_str: str):
+    if val_str == 'true' or val_str == 'yes':
+        return True
+    if val_str == 'false' or val_str == 'no':
+        return False
+    
+    try:
+        return int(val_str)
+    except ValueError:
+        pass
+    
+    try:
+        return float(val_str)
+    except ValueError:
+        pass
+    
+    return val_str
 
 def parse_settings(lines: list[str]) -> dict:
     result = {}
@@ -54,34 +73,14 @@ def parse_settings(lines: list[str]) -> dict:
 
     return result
 
-def _cast_value(val_str: str):
-    if val_str == 'true' or val_str == 'yes':
-        return True
-    if val_str == 'false' or val_str == 'no':
-        return False
-    
-    try:
-        return int(val_str)
-    except ValueError:
-        pass
-    
-    try:
-        return float(val_str)
-    except ValueError:
-        pass
-    
-    return val_str
-
 def merge_by_key(rows: list[dict], extra: dict, key: str = 'id') -> list[dict]:
     merged_rows = []
     for row in rows:
         new_row = row.copy()
-        
         row_key_val = row.get(key)
         
         if row_key_val in extra:
             extra_data = extra[row_key_val]
-            
             for k, v in extra_data.items():
                 if k not in new_row:
                     new_row[k] = v
