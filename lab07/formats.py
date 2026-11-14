@@ -42,11 +42,12 @@ def parse_settings(lines: list[str]) -> dict:
     current_key = None
 
     for line in lines:
-        if '#' in line:
-            line = line.split('#')[0]
-        
+        if ' #' in line:
+            line = line.split(' #')[0]
+        elif line.strip().startswith('#'):
+            continue 
+            
         line = line.strip()
-        
         if not line:
             continue
 
@@ -54,7 +55,6 @@ def parse_settings(lines: list[str]) -> dict:
             if current_key is not None:
                 if not isinstance(result.get(current_key), list):
                     result[current_key] = []
-                
                 val_str = line[2:].strip()
                 result[current_key].append(_cast_value(val_str))
             continue
