@@ -58,7 +58,7 @@ def parse_settings(lines: list[str]) -> dict:
                     result[current_key] = []
                 val_str = line[2:].strip()
                 if (val_str.startswith('"') and val_str.endswith('"')) or \
-                    (val_str.startswith("'") and val_str.endswith("'")):
+                (val_str.startswith("'") and val_str.endswith("'")):
 					val_str = line[2:].strip()
                 result[current_key].append(_cast_value(val_str))
             continue
