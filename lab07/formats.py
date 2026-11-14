@@ -24,14 +24,15 @@ def _cast_value(val_str: str):
         return True
     if val_str == 'false' or val_str == 'no':
         return False
-    
+        
     try:
         return int(val_str)
     except ValueError:
         pass
     
+    val_for_float = val_str.replace(',', '.')
     try:
-        return float(val_str)
+        return float(val_for_float)
     except ValueError:
         pass
     
